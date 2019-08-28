@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        .print {
+            position: relative;
+            z-index: 100;
+        }
+
+        h1 {
+            color: orangered;
+        }
+
+        h2 {
+            color: darkblue;
+        }
+
+        h2 {
+            color: forestgreen;
+        }
+
+        #bg_canvas {
+            position: absolute;
+            z-index: 500;
+            left: 0;
+            top: 0;
+        }
+    </style>
+    <script src="node_modules/rasterizehtml/dist/rasterizeHTML.allinone.js"></script>
+</head>
+
+<body>
+
+    <div id='text'>
+        <h1 style="background-color: #ccc;width: 200px;height: 200px;">Hello World</h1>
+    </div>
+    <script>
+        $(function () {
+            var clientWidth = document.documentElement.clientWidth || document.body.clientWidth
+            var clientHeight = document.documentElement.clientHeight || document.body.clientHeight
+            // 更新canvas宽高
+            $("#bg_canvas").attr("width", clientWidth);
+            $("#bg_canvas").attr("height", clientHeight);
+            $("#bg_canvas").hide();
+            $(".print").click(function () {
+                $("#bg_canvas").show()
+                alert('现在你可以使用鼠标拖拽选取打印区域，松开后完成')
+                //调用选取截屏
+                clipScreenshots("bg_canvas");
+            });
+
+
+        });
+    </script>
+</body>
+
+</html>
