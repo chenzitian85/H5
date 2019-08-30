@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>{$seoTitle}</title>
+    <meta name="keywords" content="{$seoKeywords}" />
+    <meta name="description" content="{$seoDescription}" />
+    <script type="text/javascript" src="/skin/pvc/css/index/jquery.min.js"></script>
+    <link rel="stylesheet" href="{DT_SKIN}css_h5/common.css" />
+    <link rel="stylesheet" href="{DT_SKIN}css_h5/sell.css" />
+</head>
+<body>
+    <div>
+        <div class="header">
+            <div class="header-left">
+                <a href="javascript:history.go(-1)"><img style="width: 25px;"
+                        src="/skin/pvc/images_job/rc/left1.png"></a>
+            </div>
+            <div class="header-title1"><span>产品{if $kw}搜索{else}中心{/if}</span></div>
+            <div class="header-right"></div>
+        </div>
+        {if $kw && $data[total]<1} <div class="no-find">
+            <div class="no-find-reslut">
+                <img style="width: 176px; height: 150px;;" src="/skin/pvc/images_job/rc/search-icon.png">
+                <p>搜索“{$kw}”，共找到 0 条结果</p>
+                <div>
+                    <a href="/m-{$username}/sell"><span>更多产品</span></a>
+                </div>
+            </div>
+    </div>
+    {else}
+    <div class="content">
+        {if $kw}
+        <div class="search-result">
+            <span>搜索 “{$kw}”，共找到 {$data[total]} 条结果</span>
+        </div>
+        {else}
+        <div class="toSearch">
+            <div class="search-box1">
+                <div class="to-nav">
+                    <img style="width: 15px;height: 15px;" src="/skin/pvc/images_job/rc/header-9.png">
+                </div>
+                <div class="search">
+                    <img style="width: 13px;height: 13px; margin-left: 10px;" src="/skin/pvc/images_job/rc/search.png">
+                    <input id="searchContent" type="text" placeholder="请输入关键词">
+                    <div class="del">
+                        <img style="width: 13px;height: 13px;margin-right: 10px;background: #b3afaf;border-radius: 50%;"
+                            src="/skin/pvc/images_job/rc/delect.png">
+                    </div>
+                </div>
+                <div id="search">搜索</div>
+            </div>
+        </div>
+        {/if}
+
+        <nav class="mask" style="display: none;">
+            <div class="wrapper-left">
+                <ul class="slide-wrapper">
+                    <li class="slide-list"><a href="/m-{$username}/sell">全部产品</a></li>
+                    {loop $catData $v}
+                    <li class="slide-list"><a href="/m-{$username}/sellt{$v[value]}">{$v[label]}</a></li>
+                    {/loop}
+                </ul>
+            </div>
+        </nav>
+
+        <ul id="newList">
+            {loop $data[data] $v}
+            {if $v[type]=='product'}
+            <li id="list">
+                <a href="/m-{$username}/product/detail/{$v[id]}.html"></a>
+                <div class="product-list">
+                    <img style="height:62px; width:25%;" src="{$v[image][0]}">
+                    <div class="list-info">
+                        <p>{$v[title]}</p>
+                        <div>
+                            {$v[description]}
+                        </div>
+                    </div>
+                </div>
+                </a>
+            </li>
+            {else}
+            <li>
+                <a href="/m-{$username}/sell{$v[id]}">
+                    <div class="product-list">
+                        <img style="height:62px; width:25%;" src="{$v[image][0]}">
+                        <div class="list-info">
+                            <p>{$v[title]}</p>
+                            <div>
+                                {$v[description]}
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </li>
+
+            {/if}
+            {/loop}
+        </ul>
+
+        <div id="borde" style="width: 95%; margin-left: 5%; border-top :1px solid #e6e6e6;"></div>
+
+        <div class="more" {if $data['totalPage']==1}style="display: none;" {/if}> <div class="more-product">
+            <span>查看更多</span>
+            <img style="height: 6px;width:10px;margin-left: 5px;margin-top: 3px;"
+                src="/skin/pvc/images_job/rc/moreinfo.png">
+        </div>
+    </div>
+
+    <div class="footer no-more" {if $data['totalPage']>1}style="display: none;"{/if}>
+        <fieldset>
+            <legend>
+                <span>
+                    已经到底了
+                </span>
+            </legend>
+        </fieldset>
+    </div>
+    </div>
+    {/if}
+    </div>
+
+    {template 'menu_list', 'newpvc/wap'}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".to-nav").click(function () {
+                $(".mask").show();
+            });
+            $(".mask").click(function () {
+                $(location).attr("href", "sell.htm")
+            });
+            $('.del').click(function () {
+                $('.search-box1 input').val('');
+            });
+            //搜索
+            $("#search").click(function () {
+                if ($("#searchContent").val()) {
+                    location.href = location.href + "?kw=" + $("#searchContent").val()
+                }
+            })
+
+            // 点击菜单显示子菜单
+            $(".product-menu").click(function () {
+                $(".menu").toggleClass('fadeIn');
+                $(".product-menu").hide();
+            })
+            $(".productMenu").click(function () {
+                $(".menu").toggleClass('fadeIn');
+                $(".product-menu").show();
+            })
+
+
+            // //分页
+            // var page = 2;
+            // $(".more").click(function () {
+            //     let link = `${location.href}-${page}?ajax=1`;
+            //     if (location.href.split("kw")[1]) {
+            //         link = `${location.origin + location.pathname}-${page}?ajax=1&kw=${location.href.split("kw=")[1]}`
+            //     }
+            //     $.get(link, function (data, status) {
+            //         let value = JSON.parse(data);
+            //         function dom(id, image, title, description) {
+            //             return `<a href="${location.pathname + id}">` +
+            //                 `<li>` +
+            //                 `<div class="product-list">` +
+            //                 `<img style="height:62px; width:25%;" src="${image}">` +
+            //                 `<div class="list-info">` +
+            //                 `<p>${title}</p>` +
+            //                 `<div>` +
+            //                 `${description}` +
+            //                 `</div>` +
+            //                 `</div>` +
+            //                 `</div>` +
+            //                 `</li>` +
+            //                 `</a>`
+            //         }
+            //         value.data.forEach((items) => {
+            //             $("#borde").before(dom(items.id, items.image, items.title, items.description))
+            //         });
+            //         if (page == value.totalPage) {
+            //             $(".more").hide();
+            //             $(".no-more").show();
+            //             return;
+            //         }
+            //         page = page + 1
+            //     });
+
+            // })
+
+            mui.init({
+                pullRefresh: {
+                    container: "#newList",//待刷新区域标识，querySelector能定位的css选择器均可，比如：id、.class等
+                    up: {
+                        height: 50,//可选.默认50.触发上拉加载拖动距离
+                        auto: true,//可选,默认false.自动上拉加载一次
+                        contentrefresh: "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+                        contentnomore: '没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+                        callback: pullupRefresh //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+                    }
+                }
+            });
+            function pullupRefresh() {
+
+            }
+
+          
+        });
+
+
+
+    </script>
+</body>
+
+</html>
